@@ -11,6 +11,8 @@ public class DemoController {
 
     @GetMapping("/greet/{name}")
     public String ping(@PathVariable String name){
-        return "Hello, " + name + " from Service A!";
+        return "Hello, " + name + " from Service";
     }
+
+
 }
