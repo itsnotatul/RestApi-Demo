@@ -2,6 +2,8 @@ package com.rest.api.demo.service;
 
 import com.rest.api.demo.dto.MovieRequestDto;
 import com.rest.api.demo.dto.MovieResponseDto;
+import com.rest.api.demo.dto.UpdateMovieRequestDto;
+import com.rest.api.demo.dto.UpdateMovieResponseDto;
 import com.rest.api.demo.model.Movie;
 import com.rest.api.demo.repository.MovieRepository;
 import org.springframework.stereotype.Service;
@@ -36,11 +38,13 @@ public class MovieService {
         return repo.findById(id).orElseThrow();
     }
 
-    public Movie update(Long id, Movie updated) {
-        Movie movie = getById(id);
-        movie.setName(updated.getName());
-        movie.setYear(updated.getYear());
-        return repo.save(movie);
+    public UpdateMovieResponseDto update(UpdateMovieRequestDto requestDto) {
+        Movie movie = getById(requestDto.getId());
+        movie.setName(requestDto.getName());
+        movie.setYear(requestDto.getReleaseYear());
+        Movie updated =  repo.save(movie);
+
+        return new UpdateMovieResponseDto(updated.getId());
     }
 
     public void delete(Long id) {

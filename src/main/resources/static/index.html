@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie API Demo</title>
+</head>
+<body>
+
+<h2>Create Movie</h2>
+<input id="name" placeholder="Name">
+<input id="year" placeholder="Release Year">
+<button onclick="createMovie()">Create</button>
+
+<h2>All Movies</h2>
+<button onclick="getMovies()">Refresh</button>
+<ul id="moviesList"></ul>
+
+<h2>Update Movie</h2>
+<input id="updateId" placeholder="ID">
+<input id="updateName" placeholder="New Name">
+<input id="updateYear" placeholder="New Year">
+<button onclick="updateMovie()">Update</button>
+
+<h2>Delete Movie</h2>
+<input id="deleteId" placeholder="ID">
+<button onclick="deleteMovie()">Delete</button>
+
+<script>
+    const BASE_URL = "http://localhost:8080/movies";
+
+    // CREATE
+    function createMovie() {
+        fetch(BASE_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: document.getElementById("name").value,
+                releaseYear: document.getElementById("year").value
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert("Created with ID: " + data.id);
+            getMovies();
+        });
+    }
+
+    // GET ALL
+    function getMovies() {
+        fetch(BASE_URL)
+        .then(res => res.json())
+        .then(data => {
+            const list = document.getElementById("moviesList");
+            list.innerHTML = "";
+            data.forEach(movie => {
+                const li = document.createElement("li");
+                li.innerText = `ID: ${movie.id}, Name: ${movie.name}, Year: ${movie.year}`;
+                list.appendChild(li);
+            });
+        });
+    }
+
+    // UPDATE
+    function updateMovie() {
+        fetch(BASE_URL, {   // ⚠️ matches your controller (@PutMapping without id)
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: document.getElementById("updateId").value,
+                name: document.getElementById("updateName").value,
+                releaseYear: document.getElementById("updateYear").value
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert("Updated ID: " + data.id);
+            getMovies();
+        });
+    }
+
+    // DELETE
+    function deleteMovie() {
+        const id = document.getElementById("deleteId").value;
+
+        fetch(`${BASE_URL}/${id}`, {
+            method: "DELETE"
+        })
+        .then(() => {
+            alert("Deleted");
+            getMovies();
+        });
+    }
+</script>
+
+</body>
+</html>

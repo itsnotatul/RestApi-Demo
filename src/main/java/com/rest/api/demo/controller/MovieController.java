@@ -2,6 +2,8 @@ package com.rest.api.demo.controller;
 
 import com.rest.api.demo.dto.MovieRequestDto;
 import com.rest.api.demo.dto.MovieResponseDto;
+import com.rest.api.demo.dto.UpdateMovieRequestDto;
+import com.rest.api.demo.dto.UpdateMovieResponseDto;
 import com.rest.api.demo.model.Movie;
 import com.rest.api.demo.service.MovieService;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +34,9 @@ public class MovieController {
         return service.getById(id);
     }
 
-    @PutMapping("/{id}")
-    public Movie update(@PathVariable Long id, @RequestBody Movie movie) {
-        return service.update(id, movie);
+    @PutMapping
+    public UpdateMovieResponseDto update(@RequestBody UpdateMovieRequestDto request) {
+        return service.update(request);
     }
 
     @DeleteMapping("/{id}")
